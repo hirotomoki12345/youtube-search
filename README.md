@@ -22,6 +22,6 @@ Before you begin, ensure you have met the following requirements:
 
 1. **Clone the Repository**
 
-   ```curl https://raw.githubusercontent.com/hirotomoki12345/youtube-search/main/set.sh -o Youtube-Searcher-set.sh```
+   ```curl -Ls https://raw.githubusercontent.com/hirotomoki12345/youtube-search/main/set.sh -o Youtube-Searcher-set.sh```
 
 ```bash ./Youtube-Searcher-set.sh```
