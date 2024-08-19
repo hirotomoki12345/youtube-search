@@ -43,11 +43,11 @@
             const videoElement = document.createElement("div");
             videoElement.className = "thumbnail";
             videoElement.innerHTML = `
-                        <a href="https://www.youtube.com/watch?v=${video.videoId}" target="_blank">
-                            <img src="${video.thumbnail}" alt="${video.title}">
-                        </a>
-                        <p>${video.title}</p>
-                    `;
+              <a href="view.html?videoId=${encodeURIComponent(video.videoId)}" target="_blank">
+                <img src="${video.thumbnail}" alt="${video.title}">
+              </a>
+              <p>${video.title}</p>
+            `;
             resultsDiv.appendChild(videoElement);
           });
 
