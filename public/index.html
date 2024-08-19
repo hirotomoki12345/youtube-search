@@ -3,33 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>YouTube Video Search</title>
-    <style>
-      .thumbnail {
-        cursor: pointer;
-        border: 1px solid #ddd;
-        margin: 5px;
-        display: inline-block;
-      }
-      .thumbnail img {
-        display: block;
-        max-width: 100%;
-        height: auto;
-      }
-    </style>
+    <title>Psannetwork</title>
+    <link rel="stylesheet" href="style.css" />
     <script>
       let nextPageToken = "";
       let loading = false;
 
       async function searchVideos() {
         const query = document.getElementById("searchInput").value;
-        nextPageToken = ""; // Reset token for new search
+        nextPageToken = "";
         document.getElementById("results").innerHTML = "";
+        document.querySelector("button").disabled = true;
+        document.getElementById("loader").style.display = "block";
+
         await loadVideos(query, nextPageToken);
+        document.querySelector("button").disabled = false;
+        document.getElementById("loader").style.display = "none";
       }
 
       async function loadVideos(query, pageToken) {
-        if (loading) return; // Prevent multiple simultaneous requests
+        if (loading) return;
         loading = true;
 
         try {
@@ -51,7 +44,7 @@
             resultsDiv.appendChild(videoElement);
           });
 
-          nextPageToken = data.nextPageToken || ""; // Update the next page token
+          nextPageToken = data.nextPageToken || "";
         } catch (error) {
           console.error("Error loading videos:", error);
         } finally {
@@ -72,9 +65,13 @@
     </script>
   </head>
   <body>
-    <h1>YouTube Video Search</h1>
+    <h1>Psannetwork</h1>
     <input type="text" id="searchInput" placeholder="Enter search term" />
     <button onclick="searchVideos()">Search</button>
     <div id="results"></div>
+    <footer>
+      <p><a href="https://psannetwork.netlify.app">© Psannetwork</a></p>
+    </footer>
+    <div id="loader">Loading...</div>
   </body>
 </html>
