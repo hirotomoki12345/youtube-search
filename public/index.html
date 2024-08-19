@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YouTube Video Search</title>
+    <style>
+      .thumbnail {
+        cursor: pointer;
+        border: 1px solid #ddd;
+        margin: 5px;
+        display: inline-block;
+      }
+      .thumbnail img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+      }
+    </style>
+    <script>
+      let nextPageToken = "";
+      let loading = false;
+
+      async function searchVideos() {
+        const query = document.getElementById("searchInput").value;
+        nextPageToken = ""; // Reset token for new search
+        document.getElementById("results").innerHTML = "";
+        await loadVideos(query, nextPageToken);
+      }
+
+      async function loadVideos(query, pageToken) {
+        if (loading) return; // Prevent multiple simultaneous requests
+        loading = true;
+
+        try {
+          const response = await fetch(
+            `/search?text=${encodeURIComponent(query)}&pageToken=${pageToken}`,
+          );
+          const data = await response.json();
+          const resultsDiv = document.getElementById("results");
+
+          data.results.forEach((video) => {
+            const videoElement = document.createElement("div");
+            videoElement.className = "thumbnail";
+            videoElement.innerHTML = `
+                        <a href="https://www.youtube.com/watch?v=${video.videoId}" target="_blank">
+                            <img src="${video.thumbnail}" alt="${video.title}">
+                        </a>
+                        <p>${video.title}</p>
+                    `;
+            resultsDiv.appendChild(videoElement);
+          });
+
+          nextPageToken = data.nextPageToken || ""; // Update the next page token
+        } catch (error) {
+          console.error("Error loading videos:", error);
+        } finally {
+          loading = false;
+        }
+      }
+
+      window.addEventListener("scroll", () => {
+        if (
+          window.innerHeight + window.scrollY >=
+            document.body.offsetHeight - 500 &&
+          nextPageToken
+        ) {
+          const query = document.getElementById("searchInput").value;
+          loadVideos(query, nextPageToken);
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <h1>YouTube Video Search</h1>
+    <input type="text" id="searchInput" placeholder="Enter search term" />
+    <button onclick="searchVideos()">Search</button>
+    <div id="results"></div>
+  </body>
+</html>
